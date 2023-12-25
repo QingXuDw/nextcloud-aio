@@ -328,7 +328,7 @@ class ConfigurationManager
             }
 
             // Check if port 443 is open
-            $connection = @fsockopen($domain, $qingxuNCPort, $errno, $errstr, 10);
+            $connection = @fsockopen($domain, (int)$qingxuNCPort, $errno, $errstr, 10);
             if ($connection) {
                 fclose($connection);
             } else {
