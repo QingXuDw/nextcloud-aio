@@ -1,0 +1,79 @@
+name: Build docker images
+
+on:
+  workflow_run:
+    workflows: ["Repo Sync"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [
+          {arch: 'linux/amd64', tag: 'develop'},
+          {arch: 'linux/arm64', tag: 'develop-arm64'}]
+        container: [
+          {name: 'nextcloud-aio', context: './Containers/mastercontainer'},
+        ]
+        # [
+        #   {name: 'aio-apache', context: './Containers/apache'},
+        #   {name: 'aio-borgbackup', context: './Containers/borgbackup'},
+        #   {name: 'aio-collabora', context: './Containers/collabora'},
+        #   {name: 'aio-domaincheck', context: './Containers/domaincheck'},
+        #   {name: 'all-in-one', context: './Containers/mastercontainer'},
+        #   {name: 'aio-nextcloud', context: './Containers/nextcloud'},
+        #   {name: 'aio-notify-push', context: './Containers/notify-push'},
+        #   {name: 'aio-postgresql', context: './Containers/postgresql'},
+        #   {name: 'aio-redis', context: './Containers/redis'},
+        #   {name: 'aio-talk', context: './Containers/talk'},
+        #   {name: 'aio-watchtower', context: './Containers/watchtower'},
+        #   {name: 'aio-clamav', context: './Containers/clamav'},
+        #   {name: 'aio-onlyoffice', context: './Containers/onlyoffice'},
+        #   {name: 'aio-imaginary', context: './Containers/imaginary'},
+        #   {name: 'aio-talk-recording', context: './Containers/talk-recording'},
+        #   {name: 'aio-fulltextsearch', context: './Containers/fulltextsearch'},
+        #   {name: 'aio-docker-socket-proxy', context: './Containers/docker-socket-proxy'}]
+        exclude:
+          - platform: {arch: 'linux/arm64', tag: 'develop-arm64'}
+            container: {name: 'aio-clamav', context: './Containers/clamav'}
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            qingxudw/${{ matrix.container.name }}
+          tags: |
+            ${{ matrix.platform.tag }}
+
+      - name: Build docker image and push to dockerhub
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ matrix.container.context }}
+          platforms: ${{matrix.platform.arch}}
+          no-cache: true
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          provenance: false
+          # Needed since when on default 'application/vnd.oci.image.index.v1+json' is used which does not work with "docker manifest create" (multiarch)
+          # TODO make it work with default value
