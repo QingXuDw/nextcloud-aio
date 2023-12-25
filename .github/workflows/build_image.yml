@@ -6,6 +6,12 @@ on:
     types:
       - completed
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image Tag'
+        required: true
+        default: develop
+        type: string
     
 
 jobs:
@@ -16,8 +22,8 @@ jobs:
       fail-fast: false
       matrix:
         platform: [
-          {arch: 'linux/amd64', tag: 'develop'},
-          {arch: 'linux/arm64', tag: 'develop-arm64'}]
+          {arch: 'linux/amd64', tag: '${{ inputs.tag }}'},
+          {arch: 'linux/arm64', tag: '${{ inputs.tag }}-arm64'}]
         container: [
           {name: 'nextcloud-aio', context: './Containers/mastercontainer'},
         ]
