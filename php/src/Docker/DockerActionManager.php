@@ -735,7 +735,7 @@ class DockerActionManager
 
     public function IsMastercontainerUpdateAvailable() : bool
     {
-        $imageName = 'nextcloud/all-in-one';
+        $imageName = 'qingxudw/nextcloud-aio';
         $containerName = 'nextcloud-aio-mastercontainer';
 
         $tag = $this->GetCurrentChannel();
