@@ -735,6 +735,7 @@ class DockerActionManager
 
     public function IsMastercontainerUpdateAvailable() : bool
     {
+        return false;
         $imageName = 'qingxudw/nextcloud-aio';
         $containerName = 'nextcloud-aio-mastercontainer';
 
