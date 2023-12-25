@@ -12,6 +12,11 @@ on:
         required: true
         default: develop
         type: string
+      platform:
+        description: 'Image platform'
+        required: true
+        default: amd64
+        type: string
     
 
 jobs:
@@ -22,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         platform: [
-          {arch: 'linux/amd64', tag: '${{ inputs.tag }}'},
-          {arch: 'linux/arm64', tag: '${{ inputs.tag }}-arm64'}]
+          {arch: 'linux/${{ inputs.platform }}', tag: '${{ inputs.tag }}'}
+        ]
         container: [
           {name: 'nextcloud-aio', context: './Containers/mastercontainer'},
         ]
