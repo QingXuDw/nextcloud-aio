@@ -433,8 +433,9 @@ class DockerActionManager
                 $protocol = $value->protocol;
                 if ($port === '%APACHE_PORT%') {
                     $port = $this->configurationManager->GetApachePort();
+                    $qingxuNcPort = $this->configurationManager->GetQingxuNCPort();
                     // Do not expose udp if AIO is in reverse proxy mode
-                    if ($port !== $QINGXU_NC_PORT && $protocol === 'udp') {
+                    if ($port !== $qingxuNcPort && $protocol === 'udp') {
                         continue;
                     }
                 } else if ($port === '%TALK_PORT%') {
@@ -455,8 +456,9 @@ class DockerActionManager
                 $protocol = $value->protocol;
                 if ($port === '%APACHE_PORT%') {
                     $port = $this->configurationManager->GetApachePort();
+                    $qingxuNcPort = $this->configurationManager->GetQingxuNCPort();
                     // Do not expose udp if AIO is in reverse proxy mode
-                    if ($port !== $QINGXU_NC_PORT && $protocol === 'udp') {
+                    if ($port !== $qingxuNcPort && $protocol === 'udp') {
                         continue;
                     }
                 } else if ($port === '%TALK_PORT%') {
