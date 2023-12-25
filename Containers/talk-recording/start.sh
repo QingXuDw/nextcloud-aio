@@ -34,7 +34,7 @@ videoheight = 1080
 directory = /tmp
 
 [backend-1]
-url = ${HPB_PROTOCOL}://${NC_DOMAIN}
+url = ${HPB_PROTOCOL}://${NC_DOMAIN}:${QINGXU_NC_PORT}
 secret = ${RECORDING_SECRET}
 skipverify = ${SKIP_VERIFY}
 
@@ -42,7 +42,7 @@ skipverify = ${SKIP_VERIFY}
 signalings = signaling-1
 
 [signaling-1]
-url = ${HPB_PROTOCOL}://${HPB_DOMAIN}${HPB_PATH}
+url = ${HPB_PROTOCOL}://${HPB_DOMAIN}:${QINGXU_NC_PORT}${HPB_PATH}
 internalsecret = ${INTERNAL_SECRET}
 
 [ffmpeg]

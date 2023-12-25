@@ -319,7 +319,7 @@ class ConfigurationManager
             $port = $this->GetApachePort();
 
             if (!filter_var($dnsRecordIP, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-                if ($port === '443') {
+                if ($port === "$QINGXU_NC_PORT") {
                     throw new InvalidSettingConfigurationException("It seems like the ip-address is set to an internal or reserved ip-address. This is not supported. (It was found to be set to '" . $dnsRecordIP . "')");
                 } else {
                     error_log("It seems like the ip-address of " . $domain . " is set to an internal or reserved ip-address. (It was found to be set to '" . $dnsRecordIP . "')");
@@ -327,7 +327,7 @@ class ConfigurationManager
             }
 
             // Check if port 443 is open
-            $connection = @fsockopen($domain, 443, $errno, $errstr, 10);
+            $connection = @fsockopen($domain, $QINGXU_NC_PORT, $errno, $errstr, 10);
             if ($connection) {
                 fclose($connection);
             } else {
@@ -338,7 +338,7 @@ class ConfigurationManager
             $instanceID = $this->GetAndGenerateSecret('INSTANCE_ID');
 
             // set protocol
-            if ($port !== '443') {
+            if ($port !== "$QINGXU_NC_PORT") {
                 $protocol = 'https://';
             } else {
                 $protocol = 'http://';
@@ -346,7 +346,7 @@ class ConfigurationManager
 
             // Check if response is correct
             $ch = curl_init();
-            $testUrl = $protocol . $domain . ':443';
+            $testUrl = $protocol . $domain . $QINGXU_NC_PORT;
             curl_setopt($ch, CURLOPT_URL, $testUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); 
@@ -495,7 +495,7 @@ class ConfigurationManager
     public function GetApachePort() : string {
         $envVariableName = 'APACHE_PORT';
         $configName = 'apache_port';
-        $defaultValue = '443';
+        $defaultValue = $QINGXU_NC_PORT;
         return $this->GetEnvironmentalVariableOrConfig($envVariableName, $configName, $defaultValue);
     }
 

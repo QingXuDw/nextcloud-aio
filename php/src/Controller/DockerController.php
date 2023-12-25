@@ -160,7 +160,7 @@ class DockerController
         $port = $uri->getPort();
         if ($port === 8000) {
             error_log('The AIO_URL-port was discovered to be 8000 which is not expected. It is now set to 443.');
-            $port = 443;
+            $port = "$QINGXU_NC_PORT";
         }
 
         if (isset($request->getParsedBody()['install_latest_major'])) {

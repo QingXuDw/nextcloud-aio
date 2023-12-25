@@ -8,7 +8,7 @@ fi
 echo "$INSTANCE_ID" > /var/www/domaincheck/index.html
 
 if [ -z "$APACHE_PORT" ]; then
-    export APACHE_PORT="443"
+    export APACHE_PORT="$QINGXU_NC_PORT"
 fi
 
 CONF_FILE="$(sed "s|ipv6-placeholder|\[::\]:$APACHE_PORT|" /lighttpd.conf)"

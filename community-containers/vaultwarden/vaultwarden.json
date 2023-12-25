@@ -19,7 +19,7 @@
                 "TZ=%TIMEZONE%",
                 "ROCKET_PORT=8812",
                 "ADMIN_TOKEN=%VAULTWARDEN_ADMIN_TOKEN%",
-                "DOMAIN=https://bw.%NC_DOMAIN%",
+                "DOMAIN=https://bw.%NC_DOMAIN%:%QINGXU_NC_PORT%",
                 "LOG_FILE=/logs/vaultwarden.log",
                 "LOG_LEVEL=warn",
                 "SIGNUPS_VERIFY=true",

@@ -489,7 +489,7 @@ echo "Applying network settings..."
 php /var/www/html/occ config:system:set allow_local_remote_servers --type=bool --value=true
 php /var/www/html/occ config:system:set davstorage.request_timeout --value="$PHP_MAX_TIME" --type=int
 php /var/www/html/occ config:system:set trusted_domains 1 --value="$NC_DOMAIN"
-php /var/www/html/occ config:system:set overwrite.cli.url --value="https://$NC_DOMAIN/"
+php /var/www/html/occ config:system:set overwrite.cli.url --value="https://$NC_DOMAIN:$QINGXU_NC_PORT/"
 php /var/www/html/occ config:system:set htaccess.RewriteBase --value="/"
 php /var/www/html/occ maintenance:update:htaccess
 
@@ -528,7 +528,7 @@ php /var/www/html/occ config:system:set trusted_proxies 1 --value="::1"
 if [ -n "$ADDITIONAL_TRUSTED_PROXY" ]; then
     php /var/www/html/occ config:system:set trusted_proxies 2 --value="$ADDITIONAL_TRUSTED_PROXY"
 fi
-php /var/www/html/occ config:app:set notify_push base_endpoint --value="https://$NC_DOMAIN/push"
+php /var/www/html/occ config:app:set notify_push base_endpoint --value="https://$NC_DOMAIN:$QINGXU_NC_PORT/push"
 
 # Collabora
 if [ "$COLLABORA_ENABLED" = 'yes' ]; then
@@ -539,7 +539,7 @@ if [ "$COLLABORA_ENABLED" = 'yes' ]; then
     elif [ "$SKIP_UPDATE" != 1 ]; then
         php /var/www/html/occ app:update richdocuments
     fi
-    php /var/www/html/occ config:app:set richdocuments wopi_url --value="https://$NC_DOMAIN/"
+    php /var/www/html/occ config:app:set richdocuments wopi_url --value="https://$NC_DOMAIN:$QINGXU_NC_PORT/"
     # Make collabora more save
     COLLABORA_IPv4_ADDRESS="$(dig "$NC_DOMAIN" A +short +search | grep '^[0-9.]\+$' | sort | head -n1)"
     COLLABORA_IPv6_ADDRESS="$(dig "$NC_DOMAIN" AAAA +short +search | grep '^[0-9a-f:]\+$' | sort | head -n1)"
@@ -602,7 +602,7 @@ if [ "$ONLYOFFICE_ENABLED" = 'yes' ]; then
     php /var/www/html/occ config:system:set onlyoffice jwt_secret --value="$ONLYOFFICE_SECRET"
     php /var/www/html/occ config:app:set onlyoffice jwt_secret --value="$ONLYOFFICE_SECRET"
     php /var/www/html/occ config:system:set onlyoffice jwt_header --value="AuthorizationJwt"
-    php /var/www/html/occ config:app:set onlyoffice DocumentServerUrl --value="https://$NC_DOMAIN/onlyoffice"
+    php /var/www/html/occ config:app:set onlyoffice DocumentServerUrl --value="https://$NC_DOMAIN:$QINGXU_NC_PORT/onlyoffice"
 else
     if [ "$REMOVE_DISABLED_APPS" = yes ] && [ -d "/var/www/html/custom_apps/onlyoffice" ] && [ -n "$ONLYOFFICE_SECRET" ] && [ "$(php /var/www/html/occ config:system:get onlyoffice jwt_secret)" = "$ONLYOFFICE_SECRET" ]; then
         php /var/www/html/occ app:remove onlyoffice
@@ -627,8 +627,8 @@ if [ "$TALK_ENABLED" = 'yes' ]; then
         php /var/www/html/occ talk:stun:add "$NC_DOMAIN:$TALK_PORT"
         php /var/www/html/occ talk:stun:delete "stun.nextcloud.com:443"
     fi
-    if ! php /var/www/html/occ talk:signaling:list --output="plain" | grep -q "https://$NC_DOMAIN/standalone-signaling/"; then
-        php /var/www/html/occ talk:signaling:add "https://$NC_DOMAIN/standalone-signaling/" "$SIGNALING_SECRET" --verify
+    if ! php /var/www/html/occ talk:signaling:list --output="plain" | grep -q "https://$NC_DOMAIN:$QINGXU_NC_PORT/standalone-signaling/"; then
+        php /var/www/html/occ talk:signaling:add "https://$NC_DOMAIN:$QINGXU_NC_PORT/standalone-signaling/" "$SIGNALING_SECRET" --verify
     fi
 else
     if [ "$REMOVE_DISABLED_APPS" = yes ] && [ -d "/var/www/html/custom_apps/spreed" ]; then

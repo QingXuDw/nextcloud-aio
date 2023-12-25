@@ -6,24 +6,25 @@
             "documentation": "https://github.com/nextcloud/all-in-one/tree/main/community-containers/caddy",
             "image": "szaimen/aio-caddy",
             "image_tag": "v1",
-            "internal_port": "443",
+            "internal_port": "%QINGXU_NC_PORT%",
             "restart": "unless-stopped",
             "ports": [
                 {
                   "ip_binding": "",
-                  "port_number": "443",
+                  "port_number": "%QINGXU_NC_PORT%",
                   "protocol": "tcp"
                 },
                 {
                     "ip_binding": "",
-                    "port_number": "443",
+                    "port_number": "%QINGXU_NC_PORT%",
                     "protocol": "udp"
                 }
             ],
             "environment": [
                 "TZ=%TIMEZONE%",
                 "NC_DOMAIN=%NC_DOMAIN%",
-                "APACHE_PORT=%APACHE_PORT%"
+                "APACHE_PORT=%APACHE_PORT%",
+                "QINGXU_NC_PORT=%QINGXU_NC_PORT%"
             ],
             "volumes": [
                 {

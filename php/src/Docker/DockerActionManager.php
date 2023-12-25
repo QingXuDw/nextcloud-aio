@@ -434,7 +434,7 @@ class DockerActionManager
                 if ($port === '%APACHE_PORT%') {
                     $port = $this->configurationManager->GetApachePort();
                     // Do not expose udp if AIO is in reverse proxy mode
-                    if ($port !== '443' && $protocol === 'udp') {
+                    if ($port !== $QINGXU_NC_PORT && $protocol === 'udp') {
                         continue;
                     }
                 } else if ($port === '%TALK_PORT%') {
@@ -456,7 +456,7 @@ class DockerActionManager
                 if ($port === '%APACHE_PORT%') {
                     $port = $this->configurationManager->GetApachePort();
                     // Do not expose udp if AIO is in reverse proxy mode
-                    if ($port !== '443' && $protocol === 'udp') {
+                    if ($port !== $QINGXU_NC_PORT && $protocol === 'udp') {
                         continue;
                     }
                 } else if ($port === '%TALK_PORT%') {

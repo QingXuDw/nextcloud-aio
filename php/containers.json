@@ -28,6 +28,7 @@
       "internal_port": "%APACHE_PORT%",
       "environment": [
         "NC_DOMAIN=%NC_DOMAIN%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "NEXTCLOUD_HOST=nextcloud-aio-nextcloud",
         "COLLABORA_HOST=nextcloud-aio-collabora",
         "TALK_HOST=nextcloud-aio-talk",
@@ -94,6 +95,7 @@
       ],
       "environment": [
         "POSTGRES_PASSWORD=%DATABASE_PASSWORD%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "POSTGRES_DB=nextcloud_database",
         "POSTGRES_USER=nextcloud",
         "TZ=%TIMEZONE%",
@@ -173,10 +175,11 @@
         "REDIS_HOST_PASSWORD=%REDIS_PASSWORD%",
         "AIO_TOKEN=%AIO_TOKEN%",
         "NC_DOMAIN=%NC_DOMAIN%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "ADMIN_USER=admin",
         "ADMIN_PASSWORD=%NEXTCLOUD_PASSWORD%",
         "NEXTCLOUD_DATA_DIR=/mnt/ncdata",
-        "OVERWRITEHOST=%NC_DOMAIN%",
+        "OVERWRITEHOST=%NC_DOMAIN%:%QINGXU_NC_PORT%",
         "OVERWRITEPROTOCOL=https",
         "TURN_SECRET=%TURN_SECRET%",
         "SIGNALING_SECRET=%SIGNALING_SECRET%",
@@ -250,6 +253,7 @@
       ],
       "environment": [
         "NC_DOMAIN=%NC_DOMAIN%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "NEXTCLOUD_HOST=nextcloud-aio-nextcloud",
         "REDIS_HOST=nextcloud-aio-redis",
         "REDIS_HOST_PASSWORD=%REDIS_PASSWORD%",
@@ -276,6 +280,7 @@
       "internal_port": "6379",
       "environment": [
         "REDIS_HOST_PASSWORD=%REDIS_PASSWORD%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "TZ=%TIMEZONE%"
       ],
       "volumes": [
@@ -307,7 +312,8 @@
       ],
       "internal_port": "9980",
       "environment": [
-        "aliasgroup1=https://%NC_DOMAIN%:443",
+        "aliasgroup1=https://%NC_DOMAIN%:%QINGXU_NC_PORT%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:mount_jail_tree=false --o:logging.level=warning --o:home_mode.enable=true %COLLABORA_SECCOMP_POLICY% --o:remote_font_config.url=https://%NC_DOMAIN%/apps/richdocuments/settings/fonts.json",
         "dictionaries=%COLLABORA_DICTIONARIES%",
         "TZ=%TIMEZONE%",
@@ -353,6 +359,7 @@
       "internal_port": "%TALK_PORT%",
       "environment": [
         "NC_DOMAIN=%NC_DOMAIN%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "TURN_SECRET=%TURN_SECRET%",
         "SIGNALING_SECRET=%SIGNALING_SECRET%",
         "TZ=%TIMEZONE%",
@@ -393,6 +400,7 @@
       "internal_port": "1234",
       "environment": [
         "NC_DOMAIN=%NC_DOMAIN%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "TZ=%TIMEZONE%",
         "RECORDING_SECRET=%RECORDING_SECRET%",
         "INTERNAL_SECRET=%TALK_INTERNAL_SECRET%"
@@ -422,6 +430,7 @@
       "init": true,
       "environment": [
         "BORG_PASSWORD=%BORGBACKUP_PASSWORD%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "BORG_MODE=%BORGBACKUP_MODE%",
         "SELECTED_RESTORE_TIME=%SELECTED_RESTORE_TIME%",
         "BACKUP_RESTORE_PASSWORD=%BACKUP_RESTORE_PASSWORD%",
@@ -510,6 +519,7 @@
       "internal_port": "%APACHE_PORT%",
       "environment": [
         "INSTANCE_ID=%INSTANCE_ID%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "APACHE_PORT=%APACHE_PORT%"
       ],
       "secrets": [
@@ -534,6 +544,7 @@
       "internal_port": "3310",
       "environment": [
         "TZ=%TIMEZONE%",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "CLAMD_STARTUP_TIMEOUT=90"
       ],
       "volumes": [
@@ -570,6 +581,7 @@
       "environment": [
         "TZ=%TIMEZONE%",
         "JWT_ENABLED=true",
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "JWT_HEADER=AuthorizationJwt",
         "JWT_SECRET=%ONLYOFFICE_SECRET%"
       ],
@@ -606,6 +618,7 @@
       ],
       "internal_port": "9000",
       "environment": [
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "TZ=%TIMEZONE%"
       ],
       "restart": "unless-stopped",
@@ -634,6 +647,7 @@
       ],
       "internal_port": "9200",
       "environment": [
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "TZ=%TIMEZONE%",
         "ES_JAVA_OPTS=-Xms512M -Xmx512M",
         "bootstrap.memory_lock=true",
@@ -671,6 +685,7 @@
       "init": true,
       "internal_port": "2375",
       "environment": [
+        "QINGXU_NC_PORT=%QINGXU_NC_PORT%",
         "TZ=%TIMEZONE%"
       ],
       "volumes": [

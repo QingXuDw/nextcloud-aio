@@ -23,6 +23,7 @@ services:
       - ${APACHE_IP_BINDING}:${APACHE_PORT}:${APACHE_PORT}/udp
     environment:
       - NC_DOMAIN=${NC_DOMAIN}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
       - NEXTCLOUD_HOST=nextcloud-aio-nextcloud
       - COLLABORA_HOST=nextcloud-aio-collabora
       - TALK_HOST=nextcloud-aio-talk
@@ -60,6 +61,7 @@ services:
       - POSTGRES_USER=nextcloud
       - TZ=${TIMEZONE}
       - PGTZ=${TIMEZONE}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
     stop_grace_period: 1800s
     restart: unless-stopped
     shm_size: 268435456
@@ -107,10 +109,11 @@ services:
       - REDIS_HOST=nextcloud-aio-redis
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
       - NC_DOMAIN=${NC_DOMAIN}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
       - ADMIN_USER=admin
       - ADMIN_PASSWORD=${NEXTCLOUD_PASSWORD}
       - NEXTCLOUD_DATA_DIR=/mnt/ncdata
-      - OVERWRITEHOST=${NC_DOMAIN}
+      - OVERWRITEHOST=${NC_DOMAIN}:${QINGXU_NC_PORT}
       - OVERWRITEPROTOCOL=https
       - TURN_SECRET=${TURN_SECRET}
       - SIGNALING_SECRET=${SIGNALING_SECRET}
@@ -159,6 +162,7 @@ services:
       - nextcloud_aio_nextcloud:/nextcloud:ro
     environment:
       - NC_DOMAIN=${NC_DOMAIN}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
       - NEXTCLOUD_HOST=nextcloud-aio-nextcloud
       - REDIS_HOST=nextcloud-aio-redis
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
@@ -192,7 +196,8 @@ services:
     expose:
       - "9980"
     environment:
-      - aliasgroup1=https://${NC_DOMAIN}:443
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
+      - aliasgroup1=https://${NC_DOMAIN}:${QINGXU_NC_PORT}
       - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:mount_jail_tree=false --o:logging.level=warning --o:home_mode.enable=true ${COLLABORA_SECCOMP_POLICY} --o:remote_font_config.url=https://${NC_DOMAIN}/apps/richdocuments/settings/fonts.json
       - dictionaries=${COLLABORA_DICTIONARIES}
       - TZ=${TIMEZONE}
@@ -216,6 +221,7 @@ services:
       - "8081"
     environment:
       - NC_DOMAIN=${NC_DOMAIN}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
       - TURN_SECRET=${TURN_SECRET}
       - SIGNALING_SECRET=${SIGNALING_SECRET}
       - TZ=${TIMEZONE}
@@ -242,6 +248,7 @@ services:
       - "1234"
     environment:
       - NC_DOMAIN=${NC_DOMAIN}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
       - TZ=${TIMEZONE}
       - RECORDING_SECRET=${RECORDING_SECRET}
       - INTERNAL_SECRET=${TALK_INTERNAL_SECRET}
@@ -264,6 +271,7 @@ services:
     environment:
       - TZ=${TIMEZONE}
       - CLAMD_STARTUP_TIMEOUT=90
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
     volumes:
       - nextcloud_aio_clamav:/var/lib/clamav:rw
     restart: unless-stopped
@@ -287,6 +295,7 @@ services:
       - JWT_ENABLED=true
       - JWT_HEADER=AuthorizationJwt
       - JWT_SECRET=${ONLYOFFICE_SECRET}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
     volumes:
       - nextcloud_aio_onlyoffice:/var/lib/onlyoffice:rw
     restart: unless-stopped
@@ -302,6 +311,7 @@ services:
       - "9000"
     environment:
       - TZ=${TIMEZONE}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
     restart: unless-stopped
     cap_add:
       - SYS_NICE
@@ -320,6 +330,7 @@ services:
       - "9200"
     environment:
       - TZ=${TIMEZONE}
+      - QINGXU_NC_PORT=${QINGXU_NC_PORT}
       - ES_JAVA_OPTS=-Xms512M -Xmx512M
       - bootstrap.memory_lock=true
       - cluster.name=nextcloud-aio

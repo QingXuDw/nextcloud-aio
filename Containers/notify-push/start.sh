@@ -51,7 +51,7 @@ export REDIS_URL="redis://:$REDIS_HOST_PASSWORD@$REDIS_HOST"
 # Run it
 /nextcloud/custom_apps/notify_push/bin/"$CPU_ARCH"/notify_push \
     --database-prefix="oc_" \
-    --nextcloud-url "https://$NC_DOMAIN" \
+    --nextcloud-url "https://$NC_DOMAIN:$QINGXU_NC_PORT" \
     --port 7867
 
 exec "$@"

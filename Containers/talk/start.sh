@@ -78,7 +78,7 @@ timeout = 10
 connectionsperhost = 8
 
 [backend-1]
-url = https://${NC_DOMAIN}
+url = https://${NC_DOMAIN}:${QINGXU_NC_PORT}
 secret = ${SIGNALING_SECRET}
 
 [nats]
