@@ -5,6 +5,8 @@ on:
     workflows: ["Repo Sync"]
     types:
       - completed
+  workflow_dispatch:
+    
 
 jobs:
   build:
