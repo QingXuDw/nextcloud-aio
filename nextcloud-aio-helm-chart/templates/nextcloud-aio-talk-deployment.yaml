@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   annotations:
     kompose.cmd: kompose convert -c -f latest.yml --namespace {{ .Values.NAMESPACE }}
-    kompose.version: 1.31.2 (a92241f79)
+    kompose.version: 1.34.0 (cbf2835db)
   labels:
     io.kompose.service: nextcloud-aio-talk
   name: nextcloud-aio-talk
@@ -18,9 +18,8 @@ spec:
     metadata:
       annotations:
         kompose.cmd: kompose convert -c -f latest.yml --namespace {{ .Values.NAMESPACE }}
-        kompose.version: 1.31.2 (a92241f79)
+        kompose.version: 1.34.0 (cbf2835db)
       labels:
-        io.kompose.network/nextcloud-aio: "true"
         io.kompose.service: nextcloud-aio-talk
     spec:
       containers:
@@ -29,6 +28,8 @@ spec:
               value: "{{ .Values.TALK_INTERNAL_SECRET }}"
             - name: NC_DOMAIN
               value: "{{ .Values.NC_DOMAIN }}"
+            - name: QINGXU_NC_PORT
+              value: "{{ .Values.QINGXU_NC_PORT }}"
             - name: SIGNALING_SECRET
               value: "{{ .Values.SIGNALING_SECRET }}"
             - name: TALK_PORT
@@ -37,7 +38,7 @@ spec:
               value: "{{ .Values.TURN_SECRET }}"
             - name: TZ
               value: "{{ .Values.TIMEZONE }}"
-          image: nextcloud/aio-talk:20231220_153200-latest
+          image: nextcloud/aio-talk:20241017_085101-latest
           name: nextcloud-aio-talk
           ports:
             - containerPort: {{ .Values.TALK_PORT }}
