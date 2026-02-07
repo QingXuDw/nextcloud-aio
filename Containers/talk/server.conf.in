@@ -7,7 +7,7 @@
 #readtimeout = 15
 
 # HTTP socket write timeout in seconds.
-#writetimeout = 15
+#writetimeout = 30
 
 [https]
 # IP and port to listen on for HTTPS requests.
@@ -18,14 +18,16 @@
 #readtimeout = 15
 
 # HTTPS socket write timeout in seconds.
-#writetimeout = 15
+#writetimeout = 30
 
 # Certificate / private key to use for the HTTPS server.
 certificate = /etc/nginx/ssl/server.crt
 key = /etc/nginx/ssl/server.key
 
 [app]
-# Set to "true" to install pprof debug handlers.
+# Set to "true" to install pprof debug handlers. Access will only be possible
+# from IPs allowed through the "allowed_ips" option below.
+#
 # See "https://golang.org/pkg/net/http/pprof/" for further information.
 debug = false
 
@@ -33,6 +35,12 @@ debug = false
 # only be enabled for testing. By default only streams of users in the same
 # room and call can be subscribed.
 #allowsubscribeany = false
+
+# Comma separated list of trusted proxies (IPs or CIDR networks) that may set
+# the "X-Real-Ip" or "X-Forwarded-For" headers. If both are provided, the
+# "X-Real-Ip" header will take precedence (if valid).
+# Leave empty to allow loopback and local addresses.
+#trustedproxies =
 
 [sessions]
 # Secret value used to generate checksums of sessions. This should be a random
@@ -48,6 +56,15 @@ blockkey = -encryption-key-
 # Shared secret for connections from internal clients. This must be the same
 # value as configured in the respective internal services.
 internalsecret = the-shared-secret-for-internal-clients
+
+[federation]
+# If set to "true", certificate validation of federation targets will be skipped.
+# This should only be enabled during development, e.g. to work with self-signed
+# certificates.
+#skipverify = false
+
+# Timeout in seconds for requests to federation targets.
+#timeout = 10
 
 [backend]
 # Type of backend configuration.
@@ -69,7 +86,8 @@ internalsecret = the-shared-secret-for-internal-clients
 # For backend type "etcd":
 # Key prefix of backend entries. All keys below will be watched and assumed to
 # contain a JSON document with the following entries:
-# - "url": Url of the Nextcloud instance.
+# - "urls": List of urls of the Nextcloud instance.
+# - "url": Url of the Nextcloud instance (deprecated).
 # - "secret": Shared secret for requests from and to the backend servers.
 #
 # Additional optional entries:
@@ -78,8 +96,8 @@ internalsecret = the-shared-secret-for-internal-clients
 # - "sessionlimit": Number of sessions that are allowed to connect.
 #
 # Example:
-# "/signaling/backend/one" -> {"url": "https://nextcloud.domain1.invalid", ...}
-# "/signaling/backend/two" -> {"url": "https://domain2.invalid/nextcloud", ...}
+# "/signaling/backend/one" -> {"urls": ["https://nextcloud.domain1.invalid"], ...}
+# "/signaling/backend/two" -> {"urls": ["https://domain2.invalid/nextcloud"], ...}
 #backendprefix = /signaling/backend
 
 # Allow any hostname as backend endpoint. This is extremely insecure and should
@@ -107,8 +125,8 @@ connectionsperhost = 8
 # Backend configurations as defined in the "[backend]" section above. The
 # section names must match the ids used in "backends" above.
 #[backend-id]
-# URL of the Nextcloud instance
-#url = https://cloud.domain.invalid
+# Comma-separated list of urls of the Nextcloud instance
+#urls = https://cloud.domain.invalid
 
 # Shared secret for requests from and to the backend servers. Leave empty to use
 # the common shared secret from above.
@@ -128,8 +146,8 @@ connectionsperhost = 8
 #maxscreenbitrate = 2097152
 
 #[another-backend]
-# URL of the Nextcloud instance
-#url = https://cloud.otherdomain.invalid
+# Comma-separated list of urls of the Nextcloud instance
+#urls = https://cloud.otherdomain.invalid
 
 # Shared secret for requests from and to the backend servers. Leave empty to use
 # the common shared secret from above.
@@ -163,6 +181,13 @@ connectionsperhost = 8
 # For type "proxy": will be capped to the maximum bitrate configured at the
 # proxy server that is used.
 #maxscreenbitrate = 2097152
+
+# List of IP addresses / subnets that are allowed to be used by clients in
+# candidates. The allowed list has preference over the blocked list below.
+#allowedcandidates = 10.0.0.0/8
+
+# List of IP addresses / subnets to filter from candidates received by clients.
+#blockedcandidates = 1.2.3.0/24
 
 # For type "proxy": timeout in seconds for requests to the proxy server.
 #proxytimeout = 2
@@ -221,6 +246,8 @@ connectionsperhost = 8
 # register an account at "https://www.maxmind.com/en/geolite2/signup" for
 # free. See "https://dev.maxmind.com/geoip/geoip2/geolite2/" for further
 # information.
+# You can also get a free GeoIP database from https://db-ip.com/ without
+# registration. Provide the URL below in this case.
 # Leave empty to disable GeoIP lookups.
 #license =
 
@@ -245,8 +272,9 @@ connectionsperhost = 8
 #SA = NA
 
 [stats]
-# Comma-separated list of IP addresses that are allowed to access the stats
-# endpoint. Leave empty (or commented) to only allow access from "127.0.0.1".
+# Comma-separated list of IP addresses that are allowed to access the debug,
+# stats and metrics endpoints.
+# Leave empty (or commented) to only allow access from localhost.
 #allowed_ips =
 
 [etcd]
